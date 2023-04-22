@@ -7,16 +7,33 @@ def movefile(src_folder, tar_folder):
     for file in files:
         # 将每个文件的完整路径拼接出来
         src_path = src_folder + '\\' + file
-
+        
         if os.path.isfile(src_path):
             # 移动之后的文件路径
             # 将文件民按点分割 取最后一位 即是目标的路径
 
             tar_path = tar_folder + '\\' + file.split('.')[-1]
+            
             if not os.path.exists(tar_path):
                 os.mkdir(tar_path)
             # 移动文件
-            shutil.move(src_path, tar_path)
+            file1=file
+            i=1
+            src_path_change = src_path
+            while(1):
+                tar_filepath=tar_path+'\\'+file1
+                if  os.path.exists(tar_filepath):
+                    print("%s 文件已经存在，更改为：%s" %(file1  ,file1.rsplit(".",1)[-2]+"_"+str(i)+"."+file1.rsplit(".",1)[-1]))
+                    temp =src_path_change
+                    src_path_change = src_path.rsplit(".",1)[-2]+"_"+str(i)+"."+src_path.rsplit(".",1)[-1]
+                    os.rename(temp,src_path_change)
+                    file1=file1.rsplit(".",1)[-2]+"_"+str(i)+"."+file1.rsplit(".",1)[-1]
+                    i=i+1
+                else:
+                    break
+            shutil.move(src_path_change, tar_path)
+            
+                
     os.rmdir(src_folder)
 
 
